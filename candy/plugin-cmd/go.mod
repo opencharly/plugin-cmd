@@ -2,10 +2,12 @@ module github.com/opencharly/plugin-cmd/candy/plugin-cmd
 
 go 1.26.4
 
-require github.com/opencharly/sdk v0.2026234.347
+require (
+	cuelang.org/go v0.16.1
+	github.com/opencharly/sdk v0.2026234.347
+)
 
 require (
-	cuelang.org/go v0.16.1 // indirect
 	github.com/cockroachdb/apd/v3 v3.2.1 // indirect
 	github.com/emicklei/proto v1.14.3 // indirect
 	github.com/fatih/color v1.15.0 // indirect

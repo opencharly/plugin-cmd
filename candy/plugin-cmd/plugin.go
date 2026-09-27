@@ -14,6 +14,7 @@
 package cmd
 
 import (
+	"embed"
 	"fmt"
 	"os"
 
@@ -21,16 +22,22 @@ import (
 	pb "github.com/opencharly/spec/proto"
 )
 
+//go:embed schema/*.cue
+var schemaFS embed.FS
+
 // NewProvider returns the cmd command provider (command:cmd).
 func NewProvider() pb.ProviderServer { return &provider{} }
 
 // NewMeta advertises command:cmd — the compiled-in registry path resolves it and dispatches
-// Invoke(OpRun) with the threaded in-proc reverse channel. command:cmd is a FLAT command (Box +
-// Command positionals, no subcommand catalog), so it declares no Subcommands and ships no schema.
+// Invoke(OpRun) with the threaded in-proc reverse channel — together with this plugin's OWN
+// self-contained CUE schema (schema/cmd.cue) served over Describe. There is NO schema-less plugin:
+// the schema is the uniform surface every plugin presents, even where a capability's authored input
+// is its pass-through CLI grammar rather than a structured plugin_input. command:cmd is a FLAT
+// command (Box + Command positionals), so it declares no Subcommands.
 func NewMeta() pb.PluginMetaServer {
 	return sdk.NewMeta("2026.209.0000",
 		[]sdk.ProvidedCapability{{Class: "command", Word: "cmd"}},
-		nil)
+		schemaFS)
 }
 
 // CliMain is the out-of-process CLI entrypoint (only reached when cmd is NOT compiled in). cmd
