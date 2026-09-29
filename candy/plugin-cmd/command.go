@@ -40,9 +40,9 @@ func (c *CmdCmd) Run() error {
 	var engine, name string
 	var rerr error
 	if c.Sidecar != "" {
-		engine, name, rerr = deploykit.ResolveSidecarContainer(c.Box, c.Instance, c.Sidecar)
+		engine, name, rerr = deploykit.ResolveSidecarContainer(cmdCtx, c.Box, c.Instance, c.Sidecar)
 	} else {
-		engine, name, rerr = deploykit.ResolveContainer(c.Box, c.Instance)
+		engine, name, rerr = deploykit.ResolveContainer(cmdCtx, c.Box, c.Instance)
 	}
 	if rerr != nil {
 		return rerr
